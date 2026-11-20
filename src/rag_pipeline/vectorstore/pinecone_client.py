@@ -15,12 +15,14 @@ def get_or_create_index():
     return _pc.Index(PINECONE_INDEX_NAME)
 
 
-def upsert_chunks(index, chunks, embeddings):
+def upsert_chunks(index, chunks, embeddings, batch_size=100):
     vectors = [
         (f"chunk_{i}", emb, {"text": chunk, "chunk_index": i})
         for i, (chunk, emb) in enumerate(zip(chunks, embeddings))
     ]
-    index.upsert(vectors=vectors)
+    for i in range(0, len(vectors), batch_size):
+        index.upsert(vectors=vectors[i:i + batch_size])
+
 
 
 def query(index, query_embedding, top_k=5):

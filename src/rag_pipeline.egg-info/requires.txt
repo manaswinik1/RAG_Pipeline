@@ -1,0 +1,5 @@
+anthropic
+sentence-transformers
+rank-bm25
+pinecone
+python-dotenv
